@@ -1541,6 +1541,41 @@ $config = toStd($data);
 $config->key; // value
 $config->key2; // value2
 /*
+
+function toStd($data)
+{
+    $std = new \stdClass();
+    foreach ($data as $key => $value) {
+        $std->$key = $value;
+    }
+
+    return $std;
+}
+
+namespace App\Tests;
+
+use function App\Converter\toStd;
+use PHPUnit\Framework\TestCase;
+
+class ConverterTest extends TestCase
+{
+    public function testConverter()
+    {
+        $data = [
+            'key' => 'value',
+            'key2' => 'value2',
+        ];
+        $config = toStd($data);
+        $this->assertEquals((object) $data, $config);
+
+        $data2 = [
+            'keysdd' => 'vasdfalue',
+            'kasdfey2' => 'asdvalue2',
+        ];
+        $config = toStd($data2);
+        $this->assertEquals((object) $data2, $config);
+    }
+}
 # PHPUnit
 Практика на хекслете проверяется автоматическими тестами, к которым вы уже немного привыкли, если смогли добраться до текущего урока. Для тестирования PHP-кода мы используем фреймворк PHPUnit, который, хоть и не единственный, но до сих пор - самый популярный. Имея некоторое представление об ООП, мы можем поговорить о его устройстве.
 */
