@@ -1800,6 +1800,64 @@ $result->dump(); // => ['TAYLOR', 'ABIGAIL']
 Кстати в том же JavaScript такие цепочки - основной способ строить вычисления на коллекциях.
 */
 [0, -2, 4].map(n => n ** 2).filter(n => n > 3); // [4, 16]
+
+###
+
+class DeckOfCards
+{
+    private $deck = [];
+    public function __construct(array $types)
+    {
+        $this->deck = collect($types)->map(function ($card) {
+            return [$card, $card, $card, $card];
+        })
+        ->flatten();
+    }
+    public function getShuffled()
+    {
+        $result = $this->deck->shuffle()->all();
+        return $result;
+    }
+}
+
+namespace App\Tests;
+
+use App\DeckOfCards;
+use PHPUnit\Framework\TestCase;
+
+class DeckOfCardsTest extends TestCase
+{
+    public function testGetShuffled1()
+    {
+        $expected = [2, 2, 2, 2, 3, 3, 3, 3];
+        $deck = new DeckOfCards([2, 3]);
+        $result1 = $deck->getShuffled();
+        $result2 = $deck->getShuffled();
+        $this->assertNotEquals($result1, $result2);
+
+        sort($result1);
+        $this->assertEquals($expected, $result1);
+
+        sort($result2);
+        $this->assertEquals($expected, $result2);
+    }
+
+    public function testGetShuffled2()
+    {
+        $expected = [7, 7, 7, 7, 8, 8, 8, 8, 9, 9, 9, 9];
+        $deck = new DeckOfCards([8, 9, 7]);
+        $result1 = $deck->getShuffled();
+        $result2 = $deck->getShuffled();
+        $this->assertNotEquals($result1, $result2);
+
+        sort($result1);
+        $this->assertEquals($expected, $result1);
+
+        sort($result2);
+        $this->assertEquals($expected, $result2);
+    }
+}
+
 /*
 Query Builder
 Query Builder - широко распространенный паттерн проектирования, позволяющий собирать сложные запросы по частям. Чаще всего он встречается при работе с базами данных для сбора sql, либо для коллекций, как в примерах данного урока. Этот паттерн в ОО-языках реализуется с помощью fluent interface.
